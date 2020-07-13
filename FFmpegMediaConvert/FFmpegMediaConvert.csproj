@@ -53,6 +53,10 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Page Include="Controler\AudioSelect.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Controler\ConvertItem.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -69,9 +73,16 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Buseniss\AudioInfo.cs" />
+    <Compile Include="Buseniss\Audio\AudioInfo.cs" />
     <Compile Include="Buseniss\PathAll.cs" />
-    <Compile Include="Buseniss\VideoInfo.cs" />
+    <Compile Include="Buseniss\Video\Encoder.cs" />
+    <Compile Include="Buseniss\Video\Ratio.cs" />
+    <Compile Include="Buseniss\Video\VideoInfo.cs" />
+    <Compile Include="Controler\AudioSelect.xaml.cs">
+      <DependentUpon>AudioSelect.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Enums\AudioChannel.cs" />
+    <Compile Include="Enums\VideoRatio.cs" />
     <Compile Include="Controler\ConvertItem.xaml.cs">
       <DependentUpon>ConvertItem.xaml</DependentUpon>
     </Compile>
@@ -80,6 +91,7 @@
     </Compile>
     <Compile Include="Enums\AudioCode.cs" />
     <Compile Include="Enums\VideoCode.cs" />
+    <Compile Include="Enums\VideoSize.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>

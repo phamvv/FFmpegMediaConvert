@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-namespace FFmpegMediaConvert.Enums
+﻿namespace FFmpegMediaConvert.Enums
 {
     public enum VideoCode
     {
@@ -13,6 +8,16 @@ namespace FFmpegMediaConvert.Enums
         librav1e,
         libaomAV1,
         libx264,
-        libx265
+        libx265,
+        libkvazaar,
+        libopenh264,
+        libtheora,
+        libvpx,
+        libwebp,
+        libxavs2, 
+        libxvid,
+        mpeg2,
+        png,
+        ProRes
     }
 }

@@ -5,14 +5,9 @@ using System.Text;
 
 namespace FFmpegMediaConvert.Enums
 {
-   public enum AudioCode
+    public enum AudioChannel
     {
-        copy,
-        aac,
-        ac3,
-        ac3_fixed,
-        flac,
-        opus,
-        mp3
+        Mono = 1,
+        Stereo = 2
     }
 }

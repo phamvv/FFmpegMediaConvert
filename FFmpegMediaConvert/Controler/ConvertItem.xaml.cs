@@ -1,4 +1,6 @@
 ﻿using FFmpegMediaConvert.Buseniss;
+using FFmpegMediaConvert.Buseniss.Audio;
+using FFmpegMediaConvert.Buseniss.Video;
 using System;
 using System.Collections.Generic;
 using System.IO;

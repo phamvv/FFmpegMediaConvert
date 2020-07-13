@@ -22,7 +22,6 @@ D:\GitHub\FFmpegMediaConvert\FFmpegMediaConvert\bin\Debug\dll\x86\swresample-3.d
 D:\GitHub\FFmpegMediaConvert\FFmpegMediaConvert\bin\Debug\dll\x86\swscale-5.dll
 D:\GitHub\FFmpegMediaConvert\FFmpegMediaConvert\bin\Debug\FFmpegMediaConvert.exe
 D:\GitHub\FFmpegMediaConvert\FFmpegMediaConvert\bin\Debug\FFmpegMediaConvert.pdb
-D:\GitHub\FFmpegMediaConvert\FFmpegMediaConvert\obj\Debug\FFmpegMediaConvert.csprojAssemblyReference.cache
 D:\GitHub\FFmpegMediaConvert\FFmpegMediaConvert\obj\Debug\MainWindow.g.cs
 D:\GitHub\FFmpegMediaConvert\FFmpegMediaConvert\obj\Debug\App.g.cs
 D:\GitHub\FFmpegMediaConvert\FFmpegMediaConvert\obj\Debug\FFmpegMediaConvert_Content.g.cs
@@ -41,3 +40,4 @@ D:\GitHub\FFmpegMediaConvert\FFmpegMediaConvert\obj\Debug\App.baml
 D:\GitHub\FFmpegMediaConvert\FFmpegMediaConvert\obj\Debug\Controler\VideoSelect.g.cs
 D:\GitHub\FFmpegMediaConvert\FFmpegMediaConvert\obj\Debug\Controler\VideoSelect.baml
 D:\GitHub\FFmpegMediaConvert\FFmpegMediaConvert\obj\Debug\GeneratedInternalTypeHelper.g.cs
+D:\GitHub\FFmpegMediaConvert\FFmpegMediaConvert\obj\Debug\FFmpegMediaConvert.csprojAssemblyReference.cache
