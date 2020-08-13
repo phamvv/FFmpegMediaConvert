@@ -40,4 +40,5 @@ D:\GitHub\FFmpegMediaConvert\FFmpegMediaConvert\obj\Debug\App.baml
 D:\GitHub\FFmpegMediaConvert\FFmpegMediaConvert\obj\Debug\Controler\VideoSelect.g.cs
 D:\GitHub\FFmpegMediaConvert\FFmpegMediaConvert\obj\Debug\Controler\VideoSelect.baml
 D:\GitHub\FFmpegMediaConvert\FFmpegMediaConvert\obj\Debug\GeneratedInternalTypeHelper.g.cs
-D:\GitHub\FFmpegMediaConvert\FFmpegMediaConvert\obj\Debug\FFmpegMediaConvert.csprojAssemblyReference.cache
+D:\GitHub\FFmpegMediaConvert\FFmpegMediaConvert\obj\Debug\Controler\AudioSelect.baml
+D:\GitHub\FFmpegMediaConvert\FFmpegMediaConvert\obj\Debug\Controler\AudioSelect.g.cs

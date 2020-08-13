@@ -6,21 +6,36 @@
         xmlns:local="clr-namespace:FFmpegMediaConvert" 
         xmlns:control="clr-namespace:FFmpegMediaConvert.Controler"
         mc:Ignorable="d"
-        Title="Multimedia converter" Height="450" Width="800">
+        Title="Multimedia converter" Height="600" Width="1024">
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="571*"/>
             <ColumnDefinition Width="250"/>
         </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="300*"/>
+            <RowDefinition Height="30"/>
+        </Grid.RowDefinitions>
         <GroupBox Header="Output Format" Grid.Column="1" Margin="5">
             <Grid>
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="200*"/>
-                    <RowDefinition Height="200*"/>
+                    <RowDefinition Height="235"/>
+                    <RowDefinition Height="140"/>
                     <RowDefinition Height="40"/>
                 </Grid.RowDefinitions>
-                <control:VideoSelect  x:Name="VideosSelected"/>
+
+                <GroupBox Header="Video">
+                    <control:VideoSelect  x:Name="VideosSelected"/>
+                </GroupBox>
+                <GroupBox Header="Audio" Grid.Row="1">
+                    <control:AudioSelect x:Name="AudioSelected"/>
+                </GroupBox>
+                <Button x:Name="bt_Convert" Grid.Row="2" Content="Start Convert" />
             </Grid>
         </GroupBox>
+        <Grid Grid.Row="1" Grid.ColumnSpan="2">
+            <ProgressBar x:Name="progress"/>
+            <TextBlock x:Name="txt_progress" Text="convert all file media" VerticalAlignment="Center" Margin="5,0,5,0" FontWeight="Bold"/>
+        </Grid>
     </Grid>
 </Window>

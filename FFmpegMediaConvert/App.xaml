@@ -35,11 +35,22 @@
 
         <Style TargetType="ComboBox">
             <Setter Property="VerticalAlignment" Value="Center"/>
-            <Setter Property="VerticalContentAlignment" Value="Center"/>            
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+            <Setter Property="Margin" Value="2"/>
         </Style>
 
         <Style TargetType="TextBox">
             <Setter Property="VerticalAlignment" Value="Center"/>
+            <Setter Property="Margin" Value="2"/>
+        </Style>
+
+        <!--VerticalContentAlignment="Center" VerticalAlignment="Center" HorizontalAlignment="Center"-->
+        <Style TargetType="Button">
+            <Setter Property="Padding" Value="5,3,5,3"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+            <Setter Property="VerticalAlignment" Value="Center"/>
+            <Setter Property="HorizontalAlignment" Value="Center"/>
+            <Setter Property="HorizontalContentAlignment" Value="Center"/>
         </Style>
         
     </Application.Resources>
