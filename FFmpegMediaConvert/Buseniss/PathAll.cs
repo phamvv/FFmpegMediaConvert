@@ -6,7 +6,7 @@ using System.Text;
 
 namespace FFmpegMediaConvert.Buseniss
 {
-    public static class PathAll
+    public static class PathFFMPEG
     {
         /// <summary>
         /// get full path of ffmpeg file

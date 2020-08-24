@@ -1,5 +1,6 @@
 ﻿using FFmpegMediaConvert.Buseniss.Video;
 using FFmpegMediaConvert.Enums;
+using System;
 using System.Collections.ObjectModel;
 using System.Windows.Controls;
 
@@ -15,12 +16,14 @@ namespace FFmpegMediaConvert.Controler
         private ObservableCollection<Ratio> _VideoRatioList = new ObservableCollection<Ratio>();
         private ObservableCollection<Encoder> _VideoEncoderList = new ObservableCollection<Encoder>();
 
+        private string command = "";
+
         /// <summary>
         /// load all data default to interface
         /// </summary>
         public void LoadData()
         {
-            //add default value for Videos  
+            //add default value for Videos format 
             _VideoInforList.Add(new VideoInfo { VideoName = "UHD4K:2160p", VideosHight = (Enums.VideoHight)2160, Bitrate = 9000, Code = VideoCode.libx264, FPS = 30, Ratio = VideoRatio.Ratio_16x9 });
             _VideoInforList.Add(new VideoInfo { VideoName = "QHD:1440p", VideosHight = (Enums.VideoHight)1440, Bitrate = 6500, Code = VideoCode.libx264, FPS = 30, Ratio = VideoRatio.Ratio_16x9 });
             _VideoInforList.Add(new VideoInfo { VideoName = "FullHD:1080p", VideosHight = (Enums.VideoHight)1080, Bitrate = 4000, Code = VideoCode.libx264, FPS = 30, Ratio = VideoRatio.Ratio_16x9 });
@@ -46,9 +49,9 @@ namespace FFmpegMediaConvert.Controler
 
             //add videos Encoder
             _VideoEncoderList.Add(new Encoder { VideoCode = VideoCode.copy, CoderName = "copy" });
-            _VideoEncoderList.Add(new Encoder { VideoCode = VideoCode.libx264, CoderName = "H264" });
-            _VideoEncoderList.Add(new Encoder { VideoCode = VideoCode.libopenh264, CoderName = "OPEN_H264" });
+            _VideoEncoderList.Add(new Encoder { VideoCode = VideoCode.libx264, CoderName = "H264" });        
             _VideoEncoderList.Add(new Encoder { VideoCode = VideoCode.libx265, CoderName = "H265" });
+            _VideoEncoderList.Add(new Encoder { VideoCode = VideoCode.vp9, CoderName = "libvpx-vp9" });
             _VideoEncoderList.Add(new Encoder { VideoCode = VideoCode.Hap, CoderName = "HAP" });
             _VideoEncoderList.Add(new Encoder { VideoCode = VideoCode.jpeg2000, CoderName = "JPEG_2000" });
             _VideoEncoderList.Add(new Encoder { VideoCode = VideoCode.libaomAV1, CoderName = "AOM_AV1" });
@@ -78,6 +81,49 @@ namespace FFmpegMediaConvert.Controler
         {
             get { return _videoInfo; }
             set { _videoInfo = value; }
+        }
+
+        public string GetCommand
+        {
+            get { return getCommandString(); }
+        }
+
+        private string getCommandString()
+        {
+            var code = (Encoder)cb_Code.SelectedItem;
+            if(code != null)
+            {
+                if(code.VideoCode == VideoCode.copy)
+                {
+                    command = " -c:v copy ";
+                }   
+                else
+                {
+                    switch (code.VideoCode)
+                    {
+                        case VideoCode.Hap: { command = " -c:v hap "; }; break;
+                        case VideoCode.jpeg2000: { command = " -c:v jpeg2000 "; }; break;
+                        case VideoCode.libaomAV1: { command = " -c:v libaomAV1 "; }; break;
+                        case VideoCode.libkvazaar: { command = " -c:v libkvazaar "; }; break;
+                        case VideoCode.librav1e: { command = " -c:v librav1e "; }; break;
+                        case VideoCode.libtheora: { command = " -c:v libtheora "; }; break;
+                        case VideoCode.libvpx: { command = " -c:v libvpx "; }; break;
+                        case VideoCode.libwebp: { command = " -c:v libwebp "; }; break;
+                        case VideoCode.libx264: { command = " -c:v libx264 "; }; break;
+                        case VideoCode.libx265: { command = " -c:v libx265 "; }; break;
+                        case VideoCode.libxavs2: { command = " -c:v libxavs2 "; }; break;
+                        case VideoCode.libxvid: { command = " -c:v libxvid "; }; break;
+                        case VideoCode.mpeg2: { command = " -c:v mpeg2 "; }; break;
+                        case VideoCode.png: { command = " -c:v png "; }; break;
+                        case VideoCode.ProRes: { command = " -c:v ProRes "; }; break;
+                        case VideoCode.vp9: { command = " -c:v libvpx-vp9 "; }; break;                            
+                    }
+                }    
+               
+            }
+            command += " -b:v " + txt_bitRate.Text + "k " + " -vf scale=" + txt_Width.Text + ":" + txt_Hight.Text + " -r " + txt_frameRate.Text;
+
+            return command.Replace("  "," ");
         }
 
         private void GetVideosSize()
@@ -122,7 +168,25 @@ namespace FFmpegMediaConvert.Controler
             if(item != null)
             {
                 SetVideosEncoder(item);
+                if (item.VideoCode == VideoCode.copy)
+                {
+                    showControl(false);
+                }
+                else
+                {
+                    showControl(true);
+                }    
             }    
+        }
+
+        private void showControl(bool v)
+        {
+            cb_VideosSelected.IsEnabled = v;
+            cb_Ratio.IsEnabled = v;
+            txt_Width.IsEnabled = v;
+            txt_Hight.IsEnabled = v;
+            txt_bitRate.IsEnabled = v;
+            txt_frameRate.IsEnabled = v;
         }
     }
 }

@@ -9,8 +9,7 @@ namespace FFmpegMediaConvert.Enums
     {
         copy,
         aac,
-        ac3,
-        ac3_fixed,
+        ac3,      
         flac,
         opus,
         mp3

@@ -6,34 +6,61 @@
         xmlns:local="clr-namespace:FFmpegMediaConvert" 
         xmlns:control="clr-namespace:FFmpegMediaConvert.Controler"
         mc:Ignorable="d"
-        Title="Multimedia converter" Height="600" Width="1024">
+        Title="Multimedia converter" MinHeight="600" MinWidth="800" Height="600" Width="900">
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="571*"/>
             <ColumnDefinition Width="250"/>
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
+            <RowDefinition Height="30"/>
             <RowDefinition Height="300*"/>
             <RowDefinition Height="30"/>
         </Grid.RowDefinitions>
-        <GroupBox Header="Output Format" Grid.Column="1" Margin="5">
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="80"/>
+                <ColumnDefinition Width="80"/>
+                <ColumnDefinition Width="80"/>
+                <ColumnDefinition Width="190*"/>
+                <ColumnDefinition Width="40"/>
+            </Grid.ColumnDefinitions>
+            <Button x:Name="bt_InsertFolder" Content="Insert Folder" Margin="1" Click="bt_InsertFolder_Click"/>
+            <Button x:Name="bt_SelectFile" Content="Insert File" Grid.Column="1" Margin="1" Click="bt_SelectFile_Click"/>
+            <TextBlock Text="Output folder:" Style="{StaticResource TextBlockLable}" Grid.Column="2"/>
+            <TextBox x:Name="txt_outputFolder" Grid.Column="3" Margin="1" IsReadOnly="True"/>
+            <Button x:Name="bt_selectOutputFolder" Content="..." Grid.Column="4" Margin="4" Width="30" Height="20" Click="bt_selectOutputFolder_Click"/>
+        </Grid>    
+
+        <ListView x:Name="listView" Grid.Row="1" Margin="3"/>
+        <GroupBox Header="Output Format" Grid.Column="1" Grid.RowSpan="2" Margin="5">
             <Grid>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="235"/>
                     <RowDefinition Height="140"/>
                     <RowDefinition Height="40"/>
+                    <RowDefinition Height="40*"/>
                 </Grid.RowDefinitions>
 
-                <GroupBox Header="Video">
+                <GroupBox x:Name="group_Video" Header="Video">
                     <control:VideoSelect  x:Name="VideosSelected"/>
                 </GroupBox>
-                <GroupBox Header="Audio" Grid.Row="1">
+                <GroupBox x:Name="group_Audio" Header="Audio" Grid.Row="1">
                     <control:AudioSelect x:Name="AudioSelected"/>
                 </GroupBox>
-                <Button x:Name="bt_Convert" Grid.Row="2" Content="Start Convert" />
+                <Grid Grid.Row="2">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="120*"/>
+                        <ColumnDefinition Width="60*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <TextBlock Text="Total file convert:" Style="{StaticResource TextBlockLable}"/>
+                    <ComboBox x:Name="cb_totalFileConvert" Grid.Column="1"/>
+                </Grid>
+                <Button x:Name="bt_Convert" Grid.Row="2" Content="Start Convert" Click="bt_Convert_Click" Margin="68,98.2,80.8,-81.4" />
             </Grid>
         </GroupBox>
-        <Grid Grid.Row="1" Grid.ColumnSpan="2">
+        <Grid Grid.Row="2" Grid.ColumnSpan="2">
             <ProgressBar x:Name="progress"/>
             <TextBlock x:Name="txt_progress" Text="convert all file media" VerticalAlignment="Center" Margin="5,0,5,0" FontWeight="Bold"/>
         </Grid>

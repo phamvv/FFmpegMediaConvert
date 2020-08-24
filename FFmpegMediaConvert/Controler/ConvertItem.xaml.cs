@@ -1,20 +1,11 @@
 ﻿using FFmpegMediaConvert.Buseniss;
-using FFmpegMediaConvert.Buseniss.Audio;
-using FFmpegMediaConvert.Buseniss.Video;
 using System;
-using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
-using System.Linq;
+using System.Security.Cryptography;
 using System.Text;
-using System.Windows;
+using System.Threading;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace FFmpegMediaConvert.Controler
 {
@@ -23,10 +14,12 @@ namespace FFmpegMediaConvert.Controler
     /// </summary>
     public partial class ConvertItem : UserControl
     {
+        private Thread thread;
+        private string _FileName;
         private string _inputFile;
-        private string _outputFile;
-        private VideoInfo _VideoFormat;
-        private AudioInfo _AudioFormat;
+        private string _outputFolder;
+        private string _VideoOutputFormat;
+        private string _AudioOutputFormat;
         private bool _converting { get; set; } = false;
         private bool _Complete { get; set; } = false;
 
@@ -35,25 +28,77 @@ namespace FFmpegMediaConvert.Controler
             InitializeComponent();
         }
 
-        /// <summary>
-        /// if 'True' is converting, if 'False' is not convert
-        /// </summary>
-        public bool Converting
+        private void ConvertFile(string inputFile, string outputFile)
         {
-            get { return _converting; }
-            set
+            thread = new Thread(new ThreadStart(() =>
             {
-                _converting = value;
-                if (_converting == true)
+                using (Process proc = new Process())
                 {
-                    StartConvert();
-                }
-                else
-                {
-                    StopConvert();
+                    proc.StartInfo.FileName = PathFFMPEG.FFmpegPath;
+                    if (File.Exists(outputFile)) File.Delete(outputFile);
+                    proc.StartInfo.Arguments = "-i \"" + inputFile + "\" " + _VideoOutputFormat + " " + _AudioOutputFormat + " -map 0:v -map 0:a? -threads 2 \"" + outputFile + "\"";
+                    Console.WriteLine(proc.StartInfo.Arguments);
+                    proc.StartInfo.UseShellExecute = false;
+                    proc.StartInfo.CreateNoWindow = true;
+                    proc.StartInfo.RedirectStandardError = true;
+                    proc.StartInfo.RedirectStandardOutput = true;
+                    proc.OutputDataReceived += Proc_OutputDataReceived;
+                    proc.ErrorDataReceived += Proc_ErrorDataReceived;
+                    proc.Start();
+                    proc.BeginOutputReadLine();
+                    proc.BeginErrorReadLine();
+                    proc.WaitForExit();
+                    proc.Close();
+                    _Complete = true;
                 }
 
+            }));
+            thread.IsBackground = true;
+            thread.Start();
+        }
+
+        private void Proc_ErrorDataReceived(object sender, DataReceivedEventArgs e)
+        {
+            if (e.Data != null)// if ffmpeg.exe exit , ReadLine would return null
+                UpdateProgress(e.Data);
+        }
+
+        private void Proc_OutputDataReceived(object sender, DataReceivedEventArgs e)
+        {
+            if (e.Data != null)// if ffmpeg.exe exit , ReadLine would return null
+                UpdateProgress(e.Data);
+        }
+
+        private void UpdateProgress(string line)
+        {
+            line = line.Replace(" ", "").Replace("fps=", "; FPS=").Replace("q=", "; Q=").Replace("size=", "; Size=").Replace("time=", "; Time=").Replace("bitrate=", "; Bitrate=").Replace("dup=", "; Dup=").Replace("drop=", "; Drop=").Replace("speed=", "; Speed=").ToLower();
+           // Console.WriteLine(line);
+            this.Dispatcher.Invoke(new UpdateTextCallback(this.UpdateInterface), new object[] { line.ToString() });           
+        }
+
+        public delegate void UpdateTextCallback(string message);
+
+        private void UpdateInterface(string message)
+        {            
+            if (message.StartsWith("frame=", StringComparison.InvariantCulture))
+            {
+                txt_message.Text = message;             
+                string[] chuoi = message.Split(';')[4].Split('=')[1].Split(':');
+               progressBar.Value = (int.Parse(chuoi[0]) * 3600) + (int.Parse(chuoi[1]) * 60) + (int.Parse(chuoi[2].Split('.')[0]));
             }
+            else if (message.Contains("duration:") == true && message.Contains("start:") == true && message.Contains("bitrate:") == true)
+            {
+                txt_message.Text = message;
+                string[] chuoi = message.Split(',')[0].Split(':');
+                progressBar.Maximum = (int.Parse(chuoi[1]) * 3600) + (int.Parse(chuoi[2]) * 60) + (int.Parse(chuoi[3].Split('.')[0]));
+            }
+        }
+
+        public void AddFile(string file, string fileName)
+        {
+            _inputFile = file;
+            txt_fileName.Text = fileName;
+            progressBar.Value = 0;
         }
 
         /// <summary>
@@ -64,6 +109,16 @@ namespace FFmpegMediaConvert.Controler
             get { return _Complete; }
         }
 
+        public bool Converting
+        {
+            get { return _converting; }
+        }
+
+        public string GetFileName
+        {
+            get { return _FileName; }
+        }
+
         /// <summary>
         /// set the outputs format will convert to
         /// </summary>
@@ -71,26 +126,21 @@ namespace FFmpegMediaConvert.Controler
         /// <param name="OutputFile">output file with full file path</param>
         /// <param name="VideoFormatInfo"></param>
         /// <param name="audioFormatInfo"></param>
-        public void SetOutputFormat(string inputFile, string OutputFile, VideoInfo VideoFormatInfo, AudioInfo audioFormatInfo)
+        public void SetOutputFile(string OutputFolder, string VideoOutputConvertInfo, string AudioOutputConvertInfo)
         {
-            _inputFile = inputFile;
-            _outputFile = OutputFile;
-            _VideoFormat = VideoFormatInfo;
-            _AudioFormat = audioFormatInfo;
-        }
-        private void StopConvert()
-        {
-           
+            _outputFolder = OutputFolder;
+            _VideoOutputFormat = VideoOutputConvertInfo;
+            _AudioOutputFormat = AudioOutputConvertInfo;
         }
 
-        private void StartConvert()
+        public void StartConvert(string extendsion)
         {
             _converting = true;
-            _Complete = false;
             FileInfo file = new FileInfo(_inputFile);
-            //  File.Copy(inPut, bien.filetam, true); // copy vào file tạm     
-           // convertToMp4(inPut, Path.Combine(outPut, file.Name.Replace(file.Extension, ".mp4")), "libx265", VideoSize, _videoBitrate, _frameRate, _audioBitrate, cpu);
+            _FileName = file.Name;
+            ConvertFile(_inputFile, Path.Combine(_outputFolder, file.Name.Replace(file.Extension, "."+ extendsion.Replace(".",""))));
 
         }
+
     }
 }

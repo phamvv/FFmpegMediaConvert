@@ -20,19 +20,21 @@
             <RowDefinition Height="30*"/>        
             <RowDefinition Height="30*"/>        
         </Grid.RowDefinitions>
-        <TextBlock x:Name="tbl_VideoSelected" Text="Videos Size:" Style="{StaticResource TextBlockLable}"/>
-        <TextBlock x:Name="tbl_Ratio" Text="Ratio:" Grid.Row="1"  Style="{StaticResource TextBlockLable}"/>
-        <TextBlock x:Name="tbl_Width" Text="Width:" Grid.Row="2"  Style="{StaticResource TextBlockLable}"/>
-        <TextBlock x:Name="tbl_Hight" Text="Hight:" Grid.Row="3"  Style="{StaticResource TextBlockLable}"/>
-        <TextBlock Text="FrameRate (FPS):" Grid.Row="4" Style="{StaticResource TextBlockLable}"/>
-        <TextBlock Text="Bit Rate (Kbs/s):" Grid.Row="5" Style="{StaticResource TextBlockLable}"/>
-        <TextBlock Text="Video Code:" Grid.Row="6" Style="{StaticResource TextBlockLable}"/>
-        <ComboBox x:Name="cb_VideosSelected" Grid.Column="1" SelectionChanged="cb_VideosSelected_SelectionChanged"/>
-        <ComboBox x:Name="cb_Ratio" Grid.Column="1" Grid.Row="1" SelectionChanged="cb_Ratio_SelectionChanged"/>
-        <TextBox x:Name="txt_Width" IsReadOnly="True" Grid.Row="2" Grid.Column="1"/>
-        <TextBox x:Name="txt_Hight" IsReadOnly="True" Grid.Row="3" Grid.Column="1"/>
-        <TextBox x:Name="txt_frameRate" Text="30" Grid.Row="4" Grid.Column="1"/>
-        <TextBox x:Name="txt_bitRate" Text="2500" Grid.Row="5" Grid.Column="1"/>
-        <ComboBox x:Name="cb_Code" Grid.Column="1" Grid.Row="6" SelectionChanged="cb_Code_SelectionChanged"/>
+        <TextBlock Text="Video Code:" Grid.Row="0" Style="{StaticResource TextBlockLable}"/>
+        <TextBlock x:Name="tbl_VideoSelected" Text="Videos Size:" Grid.Row="1" Style="{StaticResource TextBlockLable}"/>
+        <TextBlock x:Name="tbl_Ratio" Text="Ratio:" Grid.Row="2"  Style="{StaticResource TextBlockLable}"/>
+        <TextBlock x:Name="tbl_Width" Text="Width:" Grid.Row="3"  Style="{StaticResource TextBlockLable}"/>
+        <TextBlock x:Name="tbl_Hight" Text="Hight:" Grid.Row="4"  Style="{StaticResource TextBlockLable}"/>
+        <TextBlock Text="FrameRate (FPS):" Grid.Row="5" Style="{StaticResource TextBlockLable}"/>
+        <TextBlock Text="Bit Rate (Kbs/s):" Grid.Row="6" Style="{StaticResource TextBlockLable}"/>
+
+        <ComboBox x:Name="cb_Code" Grid.Column="1" Grid.Row="0" SelectionChanged="cb_Code_SelectionChanged"/>
+        <ComboBox x:Name="cb_VideosSelected" Grid.Column="1" Grid.Row="1" SelectionChanged="cb_VideosSelected_SelectionChanged"/>
+        <ComboBox x:Name="cb_Ratio" Grid.Column="1" Grid.Row="2" SelectionChanged="cb_Ratio_SelectionChanged"/>
+        <TextBox x:Name="txt_Width" IsReadOnly="True" Grid.Row="3" Grid.Column="1"/>
+        <TextBox x:Name="txt_Hight" IsReadOnly="True" Grid.Row="4" Grid.Column="1"/>
+        <TextBox x:Name="txt_frameRate" Text="30" Grid.Row="5" Grid.Column="1"/>
+        <TextBox x:Name="txt_bitRate" Text="2500" Grid.Row="6" Grid.Column="1"/>
+
     </Grid>
 </UserControl>
