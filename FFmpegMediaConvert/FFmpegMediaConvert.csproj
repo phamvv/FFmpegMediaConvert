@@ -78,6 +78,8 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Buseniss\Audio\AudioInfo.cs" />
+    <Compile Include="Buseniss\DefaultCode.cs" />
+    <Compile Include="Buseniss\FormatType.cs" />
     <Compile Include="Buseniss\PathAll.cs" />
     <Compile Include="Buseniss\Video\Encoder.cs" />
     <Compile Include="Buseniss\Video\Ratio.cs" />
@@ -86,6 +88,7 @@
       <DependentUpon>AudioSelect.xaml</DependentUpon>
     </Compile>
     <Compile Include="Enums\AudioChannel.cs" />
+    <Compile Include="Enums\MediaType.cs" />
     <Compile Include="Enums\VideoRatio.cs" />
     <Compile Include="Controler\ConvertItem.xaml.cs">
       <DependentUpon>ConvertItem.xaml</DependentUpon>

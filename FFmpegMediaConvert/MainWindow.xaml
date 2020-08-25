@@ -36,19 +36,20 @@
         <GroupBox Header="Output Format" Grid.Column="1" Grid.RowSpan="2" Margin="5">
             <Grid>
                 <Grid.RowDefinitions>
+                    <RowDefinition Height="30"/>
                     <RowDefinition Height="235"/>
                     <RowDefinition Height="140"/>
                     <RowDefinition Height="40"/>
                     <RowDefinition Height="40*"/>
                 </Grid.RowDefinitions>
-
-                <GroupBox x:Name="group_Video" Header="Video">
+                <ComboBox Name="cb_OutputFormat" SelectionChanged="cb_OutputFormat_SelectionChanged"/>
+                <GroupBox x:Name="group_Video" Header="Video" Grid.Row="1">
                     <control:VideoSelect  x:Name="VideosSelected"/>
                 </GroupBox>
-                <GroupBox x:Name="group_Audio" Header="Audio" Grid.Row="1">
+                <GroupBox x:Name="group_Audio" Header="Audio" Grid.Row="2">
                     <control:AudioSelect x:Name="AudioSelected"/>
                 </GroupBox>
-                <Grid Grid.Row="2">
+                <Grid Grid.Row="3">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="120*"/>
                         <ColumnDefinition Width="60*"/>
@@ -57,7 +58,7 @@
                     <TextBlock Text="Total file convert:" Style="{StaticResource TextBlockLable}"/>
                     <ComboBox x:Name="cb_totalFileConvert" Grid.Column="1"/>
                 </Grid>
-                <Button x:Name="bt_Convert" Grid.Row="2" Content="Start Convert" Click="bt_Convert_Click" Margin="68,98.2,80.8,-81.4" />
+                <Button x:Name="bt_Convert" Grid.Row="4" Content="Start Convert" Click="bt_Convert_Click" />
             </Grid>
         </GroupBox>
         <Grid Grid.Row="2" Grid.ColumnSpan="2">

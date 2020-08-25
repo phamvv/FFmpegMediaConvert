@@ -1,4 +1,5 @@
-﻿using FFmpegMediaConvert.Buseniss.Audio;
+﻿using FFmpegMediaConvert.Buseniss;
+using FFmpegMediaConvert.Buseniss.Audio;
 using FFmpegMediaConvert.Enums;
 using System;
 using System.Collections.Generic;
@@ -22,8 +23,7 @@ namespace FFmpegMediaConvert.Controler
     /// </summary>
     public partial class AudioSelect : UserControl
     {
-        private AudioInfo _audio;
-        private ObservableCollection<AudioInfo> _AudioInfoList = new ObservableCollection<AudioInfo>();
+        private AudioInfo _audio;   
         private string command = "";
 
         public AudioSelect()
@@ -33,17 +33,17 @@ namespace FFmpegMediaConvert.Controler
 
         private string setCommand()
         {
-            var item = (AudioInfo)cb_AudioCode.SelectedItem;
-            if (item != null)
+            var value = Value;
+            if (value != null)
             {
-                if(item.AudioCode == AudioCode.copy)
+                if(value.AudioCode == AudioCode.copy)
                 {
                     command = " -c:a copy ";
 
                 }    
                 else
                 {
-                    switch (item.AudioCode)
+                    switch (value.AudioCode)
                     {
                         case AudioCode.aac: command = " -c:a aac "; break;
                         case AudioCode.ac3: command = " -c:a ac3 "; break;
@@ -73,13 +73,7 @@ namespace FFmpegMediaConvert.Controler
         public void LoadData()
         {
             //add default audio info in to combobox
-            _AudioInfoList.Add(new AudioInfo { AudioName = "Copy", AudioCode = AudioCode.copy, AudioBitRate = 320, AudioChanel = AudioChannel.Stereo, AudioSampleRate = 44100 });
-            _AudioInfoList.Add(new AudioInfo { AudioName = "AAC", AudioCode = AudioCode.aac, AudioBitRate = 224, AudioChanel = AudioChannel.Stereo, AudioSampleRate = 48000 });
-            _AudioInfoList.Add(new AudioInfo { AudioName = "AC3", AudioCode = AudioCode.ac3, AudioBitRate = 224, AudioChanel = AudioChannel.Stereo, AudioSampleRate = 48000 });
-            _AudioInfoList.Add(new AudioInfo { AudioName = "FLAC", AudioCode = AudioCode.flac, AudioBitRate = 320, AudioChanel = AudioChannel.Stereo, AudioSampleRate = 48000 });
-            _AudioInfoList.Add(new AudioInfo { AudioName = "MP3", AudioCode = AudioCode.mp3, AudioBitRate = 224, AudioChanel = AudioChannel.Stereo, AudioSampleRate = 48000 });
-            _AudioInfoList.Add(new AudioInfo { AudioName = "OPUS", AudioCode = AudioCode.opus, AudioBitRate = 320, AudioChanel = AudioChannel.Stereo, AudioSampleRate = 48000 });
-            cb_AudioCode.ItemsSource = _AudioInfoList;
+            cb_AudioCode.ItemsSource = DefaultCode.listAudioInfo;
             cb_AudioCode.DisplayMemberPath = "AudioName";
             cb_AudioCode.SelectionChanged += Cb_AudioCode_SelectionChanged;
             cb_AudioCode.SelectedIndex = 0;
@@ -94,7 +88,7 @@ namespace FFmpegMediaConvert.Controler
         private void Cb_channel_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             var channel = (AudioChannel)cb_channel.SelectedItem;
-            foreach (var item in _AudioInfoList)
+            foreach (var item in DefaultCode.listAudioInfo)
             {
                 if (item == (AudioInfo)cb_AudioCode.SelectedItem)
                 {
@@ -148,7 +142,7 @@ namespace FFmpegMediaConvert.Controler
             set
             {
                 _audio = value;
-                cb_AudioCode.Text = _audio.AudioName;
+                cb_AudioCode.SelectedItem = DefaultCode.listAudioInfo.Where(s=>s.AudioCode == _audio.AudioCode).FirstOrDefault();
                 txt_BitRate.Text = _audio.AudioBitRate.ToString();
                 txt_SampleRate.Text = _audio.AudioSampleRate.ToString();
                 cb_channel.SelectedItem = _audio.AudioChanel;

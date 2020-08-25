@@ -2,6 +2,7 @@
 {
     public enum VideoHight
     {
+        Original = 0,
         CGA_200 = 200,
         QVGA_240 = 240,
         CIF_288 = 288,

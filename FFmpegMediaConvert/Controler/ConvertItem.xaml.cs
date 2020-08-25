@@ -36,7 +36,7 @@ namespace FFmpegMediaConvert.Controler
                 {
                     proc.StartInfo.FileName = PathFFMPEG.FFmpegPath;
                     if (File.Exists(outputFile)) File.Delete(outputFile);
-                    proc.StartInfo.Arguments = "-i \"" + inputFile + "\" " + _VideoOutputFormat + " " + _AudioOutputFormat + " -map 0:v -map 0:a? -threads 2 \"" + outputFile + "\"";
+                    proc.StartInfo.Arguments = "-i \"" + inputFile + "\" " + _VideoOutputFormat + " " + _AudioOutputFormat + " -map 0:v -map 0:a? -y \"" + outputFile + "\"";
                     Console.WriteLine(proc.StartInfo.Arguments);
                     proc.StartInfo.UseShellExecute = false;
                     proc.StartInfo.CreateNoWindow = true;

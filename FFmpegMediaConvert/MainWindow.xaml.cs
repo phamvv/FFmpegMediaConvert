@@ -1,4 +1,6 @@
-﻿using FFmpegMediaConvert.Controler;
+﻿using FFmpegMediaConvert.Buseniss;
+using FFmpegMediaConvert.Controler;
+using FFmpegMediaConvert.Enums;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -17,6 +19,7 @@ namespace FFmpegMediaConvert
     public partial class MainWindow : Window
     {
         private ObservableCollection<ConvertItem> listConvert = new ObservableCollection<ConvertItem>();
+
         private Timer timer;
 
         public MainWindow()
@@ -24,6 +27,8 @@ namespace FFmpegMediaConvert
             InitializeComponent();
             this.Loaded += MainWindow_Loaded;
             listConvert.CollectionChanged += ListConvert_CollectionChanged;
+            cb_OutputFormat.ItemsSource = DefaultCode.listFormatType;
+            cb_OutputFormat.DisplayMemberPath = "FormatName";
         }
 
         private void ListConvert_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
@@ -34,7 +39,7 @@ namespace FFmpegMediaConvert
                 progress.Value = progress.Maximum;
                 bt_Convert.IsEnabled = true;
                 bt_Convert.Content = "Start Convert";
-                listView.Items.Refresh();           
+                listView.Items.Refresh();
                 timer.Stop();
             }
             else
@@ -45,10 +50,10 @@ namespace FFmpegMediaConvert
 
         private void LoadListConvertInfo()
         {
-            if(listConvert.Count > 0)
+            if (listConvert.Count > 0)
             {
-                listView.ItemsSource = listConvert;              
-            }            
+                listView.ItemsSource = listConvert;
+            }
             txt_progress.Text = "Total File Convert: " + progress.Maximum.ToString("00");
         }
 
@@ -116,23 +121,37 @@ namespace FFmpegMediaConvert
             {
                 group_Video.IsEnabled = value;
                 group_Audio.IsEnabled = value;
-                bt_selectOutputFolder.IsEnabled = value;               
+                bt_selectOutputFolder.IsEnabled = value;
             }
         }
 
         private void MainWindow_Loaded(object sender, RoutedEventArgs e)
         {
+            DefaultCode.LoadDefauCode();
             VideosSelected.LoadData();
             AudioSelected.LoadData();
-            for(int i = 1; i<=10; i++)
+            LoadFormatType();
+            for (int i = 1; i <= 5; i++)
             {
                 cb_totalFileConvert.Items.Add(i.ToString());
             }
             cb_totalFileConvert.SelectedIndex = 0;
-            timer = new System.Windows.Forms.Timer();
+            timer = new Timer();
             timer.Interval = 1000;
             timer.Tick += Timer_Tick;
             txt_outputFolder.Text = AppDomain.CurrentDomain.BaseDirectory;
+        }
+
+        /// <summary>
+        /// load all defaul for format Type
+        /// </summary>
+        private void LoadFormatType()
+        {
+            //See detailed options at: https://developers.google.com/media/vp9/settings/vod
+
+            cb_OutputFormat.ItemsSource = DefaultCode.listFormatType;
+
+            cb_OutputFormat.SelectedItem = DefaultCode.listFormatType.Where(s => s.mediaType == Enums.MediaType.WEBM).FirstOrDefault(); //set default value for combobox
         }
 
         private void CloesProcess()
@@ -146,8 +165,8 @@ namespace FFmpegMediaConvert
                     proc.WaitForExit();
                 }
             }
-          //  File.Delete(System.Windows.Forms.Application.StartupPath + "\\avtemp.temp");
-           // File.Delete(System.Windows.Forms.Application.StartupPath + "\\\\temp.mp4");
+            //  File.Delete(System.Windows.Forms.Application.StartupPath + "\\avtemp.temp");
+            // File.Delete(System.Windows.Forms.Application.StartupPath + "\\\\temp.mp4");
         }
 
 
@@ -167,10 +186,10 @@ namespace FFmpegMediaConvert
             }
             else
             {
-                if (System.Windows.MessageBox.Show("bạn chắc chắn muốn dừng các tiến trình?", "Dừng chuyển đổi", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes)
+                if (System.Windows.MessageBox.Show("You definitely want to stop the all processes?", "Stop Convert", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes)
                 {
                     bt_Convert.Content = "Start Convert";
-                    HideControl = true;          
+                    HideControl = true;
                     timer.Stop();
                     CloesProcess();
                 }
@@ -190,10 +209,23 @@ namespace FFmpegMediaConvert
                         var item = listConvert[i];
                         if (item.Converting == false && item.Complete == false)
                         {
-                           
-                            item.SetOutputFile(txt_outputFolder.Text.Trim(),VideosSelected.GetCommand,AudioSelected.getCommand);
+
+                            item.SetOutputFile(txt_outputFolder.Text.Trim(), VideosSelected.GetCommand, AudioSelected.getCommand);
                             bt_Convert.Content = "Stop";
-                            item.StartConvert("mp4"); //convert to mp4 file
+                            string format = "";
+                            switch (((FormatType)cb_OutputFormat.SelectedItem).mediaType)
+                            {
+                                case MediaType.AVI: format = "avi"; break;
+                                case MediaType.DAT: format = "dat"; break;
+                                case MediaType.FLV: format = "flv"; break;
+                                case MediaType.MKV: format = "mkv"; break;
+                                case MediaType.MP4: format = "mp4"; break;
+                                case MediaType.VOB: format = "vob"; break;
+                                case MediaType.WAV: format = "wav"; break;
+                                case MediaType.WEBM: format = "webm"; break;
+                            }
+
+                            item.StartConvert(format); //convert to mp4 file
                         }
                         else if (item.Complete == true)
                         {
@@ -237,7 +269,7 @@ namespace FFmpegMediaConvert
                 progress.Maximum = listConvert.Count;
                 LoadListConvertInfo();
             }
-        }       
+        }
 
         private void bt_InsertFolder_Click(object sender, RoutedEventArgs e)
         {
@@ -249,6 +281,34 @@ namespace FFmpegMediaConvert
                 GetFileFromFolder(fd.SelectedPath);
                 LoadListConvertInfo();
             }
+        }
+        private void cb_OutputFormat_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
+        {
+            var selectedItem = (FormatType)cb_OutputFormat.SelectedItem;
+            if (selectedItem != null)
+            {
+                switch (selectedItem.mediaType)
+                {
+                    case MediaType.WEBM: SetDefaultCodeSelcted(VideoCode.vp9, AudioCode.opus); break;
+                    case MediaType.MP4: SetDefaultCodeSelcted(VideoCode.libx264, AudioCode.aac); break;
+                    case MediaType.AVI: SetDefaultCodeSelcted(VideoCode.libaomAV1, AudioCode.mp3); break;
+                    case MediaType.DAT: SetDefaultCodeSelcted(VideoCode.copy, AudioCode.copy); break;
+                    case MediaType.FLV: SetDefaultCodeSelcted(VideoCode.copy, AudioCode.copy); break;
+                    case MediaType.MKV: SetDefaultCodeSelcted(VideoCode.copy, AudioCode.copy); break;
+                    case MediaType.VOB: SetDefaultCodeSelcted(VideoCode.libxvid, AudioCode.ac3); break;
+                }
+            }
+        }
+
+        private void SetDefaultCodeSelcted(VideoCode videoCode, AudioCode audioCode)
+        {
+            foreach (var item in DefaultCode.listVideoInfo)
+            {
+                item.Code = videoCode; // set code to defual: libx264              
+            }
+            VideosSelected.Value = DefaultCode.listVideoInfo.Where(s => s.Code == videoCode).FirstOrDefault();
+            AudioSelected.Value = DefaultCode.listAudioInfo.Where(s => s.AudioCode == audioCode).FirstOrDefault();
+
         }
     }
 }

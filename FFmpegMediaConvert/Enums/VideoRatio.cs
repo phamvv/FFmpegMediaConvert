@@ -8,6 +8,7 @@
         Ratio_5x4,
         Ratio_8x5,
         Ratio_16x9,
-        Ratio_21x9
+        Ratio_21x9,
+        Original
     }
 }

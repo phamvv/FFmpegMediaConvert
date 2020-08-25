@@ -36,5 +36,7 @@ namespace FFmpegMediaConvert.Buseniss.Video
             }
 
         }
+
+        public string OtherOption { get; set; }
     }
 }

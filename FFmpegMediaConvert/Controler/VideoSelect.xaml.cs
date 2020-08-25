@@ -1,7 +1,9 @@
-﻿using FFmpegMediaConvert.Buseniss.Video;
+﻿using FFmpegMediaConvert.Buseniss;
+using FFmpegMediaConvert.Buseniss.Video;
 using FFmpegMediaConvert.Enums;
 using System;
 using System.Collections.ObjectModel;
+using System.Linq;
 using System.Windows.Controls;
 
 namespace FFmpegMediaConvert.Controler
@@ -12,9 +14,7 @@ namespace FFmpegMediaConvert.Controler
     public partial class VideoSelect : UserControl
     {
         private VideoInfo _videoInfo { get; set; }
-        private ObservableCollection<VideoInfo> _VideoInforList = new ObservableCollection<VideoInfo>();
-        private ObservableCollection<Ratio> _VideoRatioList = new ObservableCollection<Ratio>();
-        private ObservableCollection<Encoder> _VideoEncoderList = new ObservableCollection<Encoder>();
+
 
         private string command = "";
 
@@ -24,63 +24,36 @@ namespace FFmpegMediaConvert.Controler
         public void LoadData()
         {
             //add default value for Videos format 
-            _VideoInforList.Add(new VideoInfo { VideoName = "UHD4K:2160p", VideosHight = (Enums.VideoHight)2160, Bitrate = 9000, Code = VideoCode.libx264, FPS = 30, Ratio = VideoRatio.Ratio_16x9 });
-            _VideoInforList.Add(new VideoInfo { VideoName = "QHD:1440p", VideosHight = (Enums.VideoHight)1440, Bitrate = 6500, Code = VideoCode.libx264, FPS = 30, Ratio = VideoRatio.Ratio_16x9 });
-            _VideoInforList.Add(new VideoInfo { VideoName = "FullHD:1080p", VideosHight = (Enums.VideoHight)1080, Bitrate = 4000, Code = VideoCode.libx264, FPS = 30, Ratio = VideoRatio.Ratio_16x9 });
-            _VideoInforList.Add(new VideoInfo { VideoName = "HD:720p", VideosHight = (Enums.VideoHight)720, Bitrate = 3000, Code = VideoCode.libx264, FPS = 30, Ratio = VideoRatio.Ratio_16x9 });
-            _VideoInforList.Add(new VideoInfo { VideoName = "DVD:480p", VideosHight = (Enums.VideoHight)480, Bitrate = 1500, Code = VideoCode.libx264, FPS = 30, Ratio = VideoRatio.Ratio_16x9 });
-            _VideoInforList.Add(new VideoInfo { VideoName = "VCD:360p", VideosHight = (Enums.VideoHight)360, Bitrate = 900, Code = VideoCode.libx264, FPS = 30, Ratio = VideoRatio.Ratio_16x9 });
-            _VideoInforList.Add(new VideoInfo { VideoName = "SGA:240p", VideosHight = (Enums.VideoHight)240, Bitrate = 600, Code = VideoCode.libx264, FPS = 30, Ratio = VideoRatio.Ratio_16x9 });
-            cb_VideosSelected.ItemsSource = _VideoInforList;
-            cb_VideosSelected.DisplayMemberPath = "VideoName";
-            cb_VideosSelected.SelectedIndex = 3;
+            cb_VideoSize.ItemsSource = DefaultCode.listVideoInfo;
+            cb_VideoSize.DisplayMemberPath = "VideoName";
+            cb_VideoSize.SelectedIndex = 3;
 
-            //Add videos Ratio
-            _VideoRatioList.Add(new Ratio { RatioName = "16:9", VideoRatio = VideoRatio.Ratio_16x9 });
-            _VideoRatioList.Add(new Ratio { RatioName = "21:9", VideoRatio = VideoRatio.Ratio_21x9 });
-            _VideoRatioList.Add(new Ratio { RatioName = "3:2", VideoRatio = VideoRatio.Ratio_3x2 });
-            _VideoRatioList.Add(new Ratio { RatioName = "4:3", VideoRatio = VideoRatio.Ratio_4x3 });
-            _VideoRatioList.Add(new Ratio { RatioName = "5:3", VideoRatio = VideoRatio.Ratio_5x3 });
-            _VideoRatioList.Add(new Ratio { RatioName = "5:4", VideoRatio = VideoRatio.Ratio_5x4 });
-            _VideoRatioList.Add(new Ratio { RatioName = "8:5", VideoRatio = VideoRatio.Ratio_8x5 });
-            cb_Ratio.ItemsSource = _VideoRatioList;
+            //Add videos Ratio            
+            cb_Ratio.ItemsSource = DefaultCode.VideoRatioList;
             cb_Ratio.DisplayMemberPath = "RatioName";
             cb_Ratio.SelectedIndex = 0;
 
-            //add videos Encoder
-            _VideoEncoderList.Add(new Encoder { VideoCode = VideoCode.copy, CoderName = "copy" });
-            _VideoEncoderList.Add(new Encoder { VideoCode = VideoCode.libx264, CoderName = "H264" });        
-            _VideoEncoderList.Add(new Encoder { VideoCode = VideoCode.libx265, CoderName = "H265" });
-            _VideoEncoderList.Add(new Encoder { VideoCode = VideoCode.vp9, CoderName = "libvpx-vp9" });
-            _VideoEncoderList.Add(new Encoder { VideoCode = VideoCode.Hap, CoderName = "HAP" });
-            _VideoEncoderList.Add(new Encoder { VideoCode = VideoCode.jpeg2000, CoderName = "JPEG_2000" });
-            _VideoEncoderList.Add(new Encoder { VideoCode = VideoCode.libaomAV1, CoderName = "AOM_AV1" });
-            _VideoEncoderList.Add(new Encoder { VideoCode = VideoCode.libkvazaar, CoderName = "AAR" });
-            _VideoEncoderList.Add(new Encoder { VideoCode = VideoCode.librav1e, CoderName = "AV1E" });
-            _VideoEncoderList.Add(new Encoder { VideoCode = VideoCode.libtheora, CoderName = "THEORA" });
-            _VideoEncoderList.Add(new Encoder { VideoCode = VideoCode.libvpx, CoderName = "VPX" });
-            _VideoEncoderList.Add(new Encoder { VideoCode = VideoCode.libwebp, CoderName = "WEBP" });
-            _VideoEncoderList.Add(new Encoder { VideoCode = VideoCode.libxavs2, CoderName = "XAVS2" });
-            _VideoEncoderList.Add(new Encoder { VideoCode = VideoCode.libxvid, CoderName = "XVID" });
-            _VideoEncoderList.Add(new Encoder { VideoCode = VideoCode.mpeg2, CoderName = "MPEG2" });
-            _VideoEncoderList.Add(new Encoder { VideoCode = VideoCode.png, CoderName = "PNG" });
-            _VideoEncoderList.Add(new Encoder { VideoCode = VideoCode.ProRes, CoderName = "PRORES" });
-            cb_Code.ItemsSource = _VideoEncoderList;
+            cb_Code.ItemsSource = DefaultCode.VideoEncoderList;
             cb_Code.DisplayMemberPath = "CoderName";
             cb_Code.SelectedIndex = 1;
-           
+
 
         }
 
         public VideoSelect()
         {
-            InitializeComponent();        
+            InitializeComponent();
         }
 
         public VideoInfo Value
         {
             get { return _videoInfo; }
-            set { _videoInfo = value; }
+            set
+            {
+                _videoInfo = value;
+                cb_Code.SelectedItem = DefaultCode.VideoEncoderList.Where(s => s.VideoCode == _videoInfo.Code).FirstOrDefault();
+
+            }
         }
 
         public string GetCommand
@@ -91,12 +64,12 @@ namespace FFmpegMediaConvert.Controler
         private string getCommandString()
         {
             var code = (Encoder)cb_Code.SelectedItem;
-            if(code != null)
+            if (code != null)
             {
-                if(code.VideoCode == VideoCode.copy)
+                if (code.VideoCode == VideoCode.copy)
                 {
                     command = " -c:v copy ";
-                }   
+                }
                 else
                 {
                     switch (code.VideoCode)
@@ -116,56 +89,111 @@ namespace FFmpegMediaConvert.Controler
                         case VideoCode.mpeg2: { command = " -c:v mpeg2 "; }; break;
                         case VideoCode.png: { command = " -c:v png "; }; break;
                         case VideoCode.ProRes: { command = " -c:v ProRes "; }; break;
-                        case VideoCode.vp9: { command = " -c:v libvpx-vp9 "; }; break;                            
-                    }
-                }    
-               
-            }
-            command += " -b:v " + txt_bitRate.Text + "k " + " -vf scale=" + txt_Width.Text + ":" + txt_Hight.Text + " -r " + txt_frameRate.Text;
+                        case VideoCode.vp9:
+                            {
+                                //detail information: https://developers.google.com/media/vp9/settings/vod
+                                var videoInfo = ((VideoInfo)cb_VideoSize.SelectedItem);
+                                string crf = "32";
+                                if (int.Parse(txt_Hight.Text) <= 480)
+                                    crf = "34";
+                                else if (int.Parse(txt_Hight.Text) <= 720)
+                                    crf = "32";
+                                else if (int.Parse(txt_Hight.Text) <= 1080)
+                                    crf = "31";
+                                else if (int.Parse(txt_Hight.Text) <= 1440)
+                                    crf = "24";
+                                else if (int.Parse(txt_Hight.Text) <= 2160)
+                                    crf = "18";
 
-            return command.Replace("  "," ");
+                                command = " -c:v libvpx-vp9 ";
+                                command += " -minrate " + (int.Parse(txt_bitRate.Text) / 2).ToString() + "k -maxrate " +
+                                    (int.Parse(txt_bitRate.Text) / 2 + int.Parse(txt_bitRate.Text)).ToString() + "k -g 240 " +
+                                    " -quality good -crf " + crf + " -speed 4 ";
+                            }; break;
+                    }
+                    if(((VideoInfo)cb_VideoSize.SelectedItem).VideosHight == VideoHight.Original)
+                    {
+                        command += " -b:v " + txt_bitRate.Text + "k ";
+                    }    
+                    else
+                    {
+                        if (((Ratio)cb_Ratio.SelectedItem).VideoRatio == VideoRatio.Original)
+                            command += " -b:v " + txt_bitRate.Text + "k " + " -vf scale=-1:" + txt_Hight.Text + " -r " + txt_frameRate.Text;
+                        else
+                            command += " -b:v " + txt_bitRate.Text + "k " + " -vf scale=" + txt_Width.Text + ":" + txt_Hight.Text + " -r " + txt_frameRate.Text;
+                    }
+
+                }
+            }
+            return command.Replace("  ", " ");
         }
 
         private void GetVideosSize()
         {
-            var item = ((VideoInfo)cb_VideosSelected.SelectedItem);
+            var item = ((VideoInfo)cb_VideoSize.SelectedItem);
             if (item != null)
             {
-                txt_Width.Text = item.VideosWidth.ToString();
-                txt_Hight.Text = ((int)item.VideosHight).ToString();
-                txt_bitRate.Text = item.Bitrate.ToString();
-                txt_frameRate.Text = item.FPS.ToString();
+                if(item.VideosHight == VideoHight.Original)
+                {
+                    txt_Width.Text = "Original";
+                    txt_Hight.Text = "Original";
+                    txt_bitRate.Text = item.Bitrate.ToString();
+                    txt_frameRate.Text = "Original";
+                }    
+                else
+                {
+                    var ratio = (Ratio)cb_Ratio.SelectedItem;
+                    if(ratio != null)
+                    {
+                        if (ratio.VideoRatio == VideoRatio.Original)
+                        {
+                            txt_Width.Text = "-1";
+                            txt_Hight.Text = ((int)item.VideosHight).ToString();
+                            txt_bitRate.Text = item.Bitrate.ToString();
+                            txt_frameRate.Text = item.FPS.ToString();
+                        }
+                        else
+                        {
+                            txt_Width.Text = item.VideosWidth.ToString();
+                            txt_Hight.Text = ((int)item.VideosHight).ToString();
+                            txt_bitRate.Text = item.Bitrate.ToString();
+                            txt_frameRate.Text = item.FPS.ToString();
+                        }
+                    }   
+                   
+                }    
+                
             }
         }
         private void SetVideosEncoder(Encoder code)
         {
-            foreach(var item in _VideoInforList)
+            foreach (var item in DefaultCode.listVideoInfo)
             {
                 item.Code = code.VideoCode;
-            }    
+            }
         }
         private void cb_VideosSelected_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            GetVideosSize();          
+            GetVideosSize();
         }
 
         private void cb_Ratio_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             var item = (Ratio)cb_Ratio.SelectedItem;
-            if(item != null)
+            if (item != null)
             {
-                foreach(var m in _VideoInforList)
+                foreach (var m in DefaultCode.listVideoInfo)
                 {
                     m.Ratio = item.VideoRatio;
                 }
                 GetVideosSize();
-            }    
+            }
         }
 
         private void cb_Code_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             var item = (Encoder)cb_Code.SelectedItem;
-            if(item != null)
+            if (item != null)
             {
                 SetVideosEncoder(item);
                 if (item.VideoCode == VideoCode.copy)
@@ -175,13 +203,13 @@ namespace FFmpegMediaConvert.Controler
                 else
                 {
                     showControl(true);
-                }    
-            }    
+                }
+            }
         }
 
         private void showControl(bool v)
         {
-            cb_VideosSelected.IsEnabled = v;
+            cb_VideoSize.IsEnabled = v;
             cb_Ratio.IsEnabled = v;
             txt_Width.IsEnabled = v;
             txt_Hight.IsEnabled = v;

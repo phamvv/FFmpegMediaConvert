@@ -29,7 +29,7 @@
         <TextBlock Text="Bit Rate (Kbs/s):" Grid.Row="6" Style="{StaticResource TextBlockLable}"/>
 
         <ComboBox x:Name="cb_Code" Grid.Column="1" Grid.Row="0" SelectionChanged="cb_Code_SelectionChanged"/>
-        <ComboBox x:Name="cb_VideosSelected" Grid.Column="1" Grid.Row="1" SelectionChanged="cb_VideosSelected_SelectionChanged"/>
+        <ComboBox x:Name="cb_VideoSize" Grid.Column="1" Grid.Row="1" SelectionChanged="cb_VideosSelected_SelectionChanged"/>
         <ComboBox x:Name="cb_Ratio" Grid.Column="1" Grid.Row="2" SelectionChanged="cb_Ratio_SelectionChanged"/>
         <TextBox x:Name="txt_Width" IsReadOnly="True" Grid.Row="3" Grid.Column="1"/>
         <TextBox x:Name="txt_Hight" IsReadOnly="True" Grid.Row="4" Grid.Column="1"/>
